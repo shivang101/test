@@ -5,18 +5,18 @@ const geocode = (address, callback) => {
     address
   )}.json?access_token=pk.eyJ1Ijoic2hpdmFuZzA0MDIiLCJhIjoiY2w5czdtOXlnMDk1dDNubXk2YThzOXo5dyJ9.67K2_xzMI2SSYhyLifW7wg&limit=1`;
 
-  request({ url: url, json: true }, (error, response) => {
+  request({ url, json: true }, (error, { body } = response) => {
     if (error) {
       callback("unable to connect to location services", undefined);
-    } else if (response.body.features.length === 0) {
+    } else if (body.features.length === 0) {
       callback("Unable to find that loaction, Try another search", undefined);
     } else {
-      const latitude = response.body.features[0].center[1];
-      const longitude = response.body.features[0].center[0];
+      const latitude = body.features[0].center[1];
+      const longitude = body.features[0].center[0];
       callback(undefined, {
         latitude,
         longitude,
-        location: response.body.features[0].place_name,
+        location: body.features[0].place_name,
       });
     }
   });
